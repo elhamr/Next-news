@@ -13,7 +13,7 @@ const page = () => {
 
   return (
     <>
-    <Navbar centerLogo showAuthButtons={false}/>
+    {/* <Navbar centerLogo showAuthButtons={false}/> */}
     
     <div className="min-h-screen flex items-center justify-center">
         

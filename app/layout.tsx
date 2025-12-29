@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import SearchBar from "@/components/SearchBar";
+import { Provider } from "react-redux";
+import ReduxProvider from "@/app/store/provider";
+
+import LayoutWrapper from "@/components/LayoutWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,20 +23,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-         <Navbar />
+        <ReduxProvider>
+          <LayoutWrapper>{children}</LayoutWrapper>
+        </ReduxProvider>
 
-      <section className="flex justify-center mt-24">
-        <SearchBar />
-      </section>
-        {children}
       </body>
     </html>
   );

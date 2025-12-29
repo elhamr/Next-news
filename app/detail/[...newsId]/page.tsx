@@ -26,6 +26,7 @@ export default async function NewsDetail({
   
   const response = await fetch(
     `${process.env.BASE_GUARDIAN_URL}/${id}?api-key=${process.env.API_KEY}&show-fields=thumbnail%2CtrailText%2Cbody`
+    ,{ cache: "force-cache" }
   );
   const result = await response.json();
   const news = result.response?.content;
@@ -56,10 +57,13 @@ export default async function NewsDetail({
 export const generateStaticParams = async () => {
   try {
 
-    const response = await fetch(`${process.env.BASE_GUARDIAN_URL}/search?api-key=${process.env.API_KEY}&page-size=20`
-    );
+    console.log("BASE_GUARDIAN_URL:", process.env.BASE_GUARDIAN_URL);
+    console.log("API_KEY:", process.env.API_KEY);
+
+    const response = await fetch(`${process.env.BASE_GUARDIAN_URL}/search?api-key=${process.env.API_KEY}&page-size=20`);
     const result = await response.json();
-if (!result.response?.results) {
+
+    if (!result.response?.results) {
       return [];
     }
     
