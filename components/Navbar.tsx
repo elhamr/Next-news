@@ -13,7 +13,7 @@ import Image from "next/image";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/app/store";
 import { logout } from "@/app/store/authSlice";
-
+import { toggleTheme } from "@/app/store/themeSlice";
 
 interface NavbarProps {
   centerLogo?: boolean;
@@ -25,9 +25,17 @@ const Navbar : React.FC<NavbarProps> = ({
   showAuthButtons = true,
 }) => {
   const dispatch = useDispatch();
+  
+  const isDark = useSelector((state: RootState) => state.theme.isDark)
+  const handleThemeToggle = () => {
+    dispatch(toggleTheme())
+    document.documentElement.classList.toggle('dark')
+    localStorage.setItem('theme', !isDark ? 'dark' : 'light')
+  }
   const {isAuthenticated, user} = useSelector(
     (state: RootState) => state.auth
   );
+
   return(
     <nav className={`flex items-center px-6 py-4 border-b 
       ${centerLogo ? "justify-center" : "justify-between"}`}>
@@ -47,9 +55,16 @@ const Navbar : React.FC<NavbarProps> = ({
         and i used props for using Navbar in Dynamic mode*/ }
         {!centerLogo && showAuthButtons &&(
           <>
+          <div className="flex gap-3">
+          <Button
+                  onClick={handleThemeToggle}
+                  >
+              {isDark ? '☀️' : '🌙'}
+               </Button>
             {!isAuthenticated ? (
               <div className="flex gap-3">
-
+ 
+               
                 <Button asChild variant="outline">
                   <Link href="/log-in">Log In</Link>
                 </Button>
@@ -86,6 +101,7 @@ const Navbar : React.FC<NavbarProps> = ({
 
               </DropdownMenu>
             )}
+           </div>
           </>
         )}
     </nav>

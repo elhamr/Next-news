@@ -22,7 +22,7 @@ export default function LayoutWrapper({
       />
 
       {!isAuthPage && 
-            <section className="flex justify-center mt-24">
+            <section className="flex justify-center mt-10">
             <SearchBar />
             </section>
         } 

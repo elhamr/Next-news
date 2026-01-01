@@ -2,6 +2,9 @@
 import  DOMPurify from "isomorphic-dompurify";
 import Image from "next/image";
 import { Card, CardHeader } from "@/components/ui/card";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
+
 
 export type NewsDetailProps = {
   news: {
@@ -32,33 +35,38 @@ export default async function NewsDetail({
   const news = result.response?.content;
   const cleanContent = DOMPurify.sanitize(news?.fields?.body);
   return (
-    <div className="">
-      <Card className="">
-     <CardHeader> <h1 className="">{news?.webTitle}</h1></CardHeader>
+  <>
+  <div className="p-10">
+     <Link href={`/`} >
+            <ArrowLeft className="h-5 w-5" />
+       </Link>
+       </div>
+    <div className="flex justify-center items-center mt-8">
+         
+      <Card className="lg:w-3/5">
+     <CardHeader> <h1 className="text-3xl font-bold">{news?.webTitle}</h1></CardHeader>
      <div className="">
-       <Image src={news.fields.thumbnail} alt={news.webTitle} width={800} height={400} className="object-cover"/>
+       <Image src={news.fields.thumbnail} alt={news.webTitle} width={800} height={400} className="w-full  lg: object-cover rounded-2xl"/>
       </div>
-      <p className="">
+      <div
+        className="m-8"
+        dangerouslySetInnerHTML={{ __html: cleanContent }}
+      />
+      <p className="flex justify-between m-5 ">
         <span className="">{news?.sectionName}</span>
         <span className="" suppressHydrationWarning>
           {new Date(news?.webPublicationDate).toLocaleDateString()}
         </span>
       </p>
       
-      <div
-        className=""
-        dangerouslySetInnerHTML={{ __html: cleanContent }}
-      />
+      
       </Card>
-    </div>
+    </div></>
   );
 }
 
 export const generateStaticParams = async () => {
   try {
-
-    console.log("BASE_GUARDIAN_URL:", process.env.BASE_GUARDIAN_URL);
-    console.log("API_KEY:", process.env.API_KEY);
 
     const response = await fetch(`${process.env.BASE_GUARDIAN_URL}/search?api-key=${process.env.API_KEY}&page-size=20`);
     const result = await response.json();

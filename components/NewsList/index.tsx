@@ -5,10 +5,22 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { NewsListProps } from "./types";
 import Image from "next/image";
 import Link from "next/link";
 
+export type NewsListProps = {
+  list: {
+    id: string;
+    webTitle: string;
+    fields: {
+      thumbnail: string;
+      trailText: string;
+    };
+    sectionName: string;
+    webPublicationDate: string;
+    description:string;
+  }[];
+};
 const NewsList = ({ list = [] }: NewsListProps) => {
   if (!list.length) {
     return <p className="text-center mt-10">No news found</p>;
@@ -18,7 +30,7 @@ const NewsList = ({ list = [] }: NewsListProps) => {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-8">
       {list.map((news) => (
         <Card key={news.id} className="overflow-hidden">
-          <Link href={`/news/${news.id}`}>
+          <Link href={`/detail/${news.id}`}>
             <CardHeader className="p-0">
               {news.fields?.thumbnail && (
                 <Image
@@ -26,18 +38,18 @@ const NewsList = ({ list = [] }: NewsListProps) => {
                   alt={news.webTitle}
                   width={400}
                   height={240}
-                  className="object-cover w-full h-48"
+                  className="object-cover w-full "
                 />
               )}
             </CardHeader>
 
             <div className="p-4 space-y-2">
-              <CardTitle className="text-base">
+              <CardTitle className="text-base line-clamp-2">
                 {news.webTitle}
               </CardTitle>
 
               <CardDescription
-                className="text-sm"
+                className="text-sm line-clamp-2"
                 dangerouslySetInnerHTML={{
                   __html: news.fields?.trailText || "",
                 }}
@@ -56,6 +68,7 @@ const NewsList = ({ list = [] }: NewsListProps) => {
         </Card>
       ))}
     </div>
+
   );
 };
 

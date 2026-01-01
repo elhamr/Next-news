@@ -1,8 +1,22 @@
 import NewsList from "@/components/NewsList";
+import NewsPagination from "@/components/paginationNews";
 
-export default async function Home() {
+export default async function Home(
+  {
+  searchParams,
+}: {
+  searchParams?: Promise<{
+    page?: string
+    pageSize?: string
+  }>
+}
+) {
   const BASE_URL = process.env.BASE_GUARDIAN_URL;
   const API_KEY = process.env.API_KEY;
+  
+  const params = await searchParams;
+  const currentPage = parseInt(params?.page || '1');
+  const pageSize = parseInt(params?.pageSize || '9');
 
   if (!BASE_URL || !API_KEY) {
     console.error("Missing environment variables!");
@@ -11,53 +25,36 @@ export default async function Home() {
 
   try {
     const response = await fetch(
-      
-       `${BASE_URL}/search?show-fields=thumbnail,trailText&api-key=${API_KEY}`
+       `${BASE_URL}/search?show-fields=thumbnail,trailText&api-key=${API_KEY}&page-size=${pageSize}&page=${currentPage}`
+     
       , { cache: "no-store" }
     );
     const data = await response.json();
 
-    //response and results
     const list = data?.response?.results ?? [];
+    
+    
+    const totalResults = data?.response?.total || 0;
+    
+    const totalPages = Math.ceil(totalResults / pageSize);
 
-    // //empty
-    // console.log(list);
-
-    // // 
-    // console.log("BASE_URL:", BASE_URL);
-    // console.log("API_KEY:", API_KEY);
-    // console.log("DATA:", data);
-    // console.log("RESULTS:", data?.response?.results);
-
+    
 
     return (
       <main className="min-h-screen">
         <NewsList list={list} />
+          
+      <NewsPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+           
+         />
       </main>
+
     );
   } catch (error) {
     console.error("Error fetching news:", error);
     return <main className="min-h-screen">Failed to fetch news</main>;
   }
 }
-
-
-
-// last code
-
-// import NewsList from "@/components/NewsList";
-
-// export default async function Home() {
-//   const response = await fetch(`${process.env.BASE_GUARDIAN_URL}/search?show-fields=thumbnail%2CtrailText&api-key=${process.env.API_KEY}`);
-//   const data=await response.json();
-//   const list =data.response.results;
-
-//   return (
-//     <main className="min-h-screen">
-//       <NewsList list={list}/>
-
-//     </main>
-   
-//   );
-// }
 
