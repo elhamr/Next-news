@@ -56,10 +56,13 @@ const Navbar : React.FC<NavbarProps> = ({
         {!centerLogo && showAuthButtons &&(
           <>
           <div className="flex gap-3">
-          <Button
+              <Button
                   onClick={handleThemeToggle}
                   >
               {isDark ? '☀️' : '🌙'}
+               </Button>
+               <Button>
+               <Link href="/bookmarks">bookmarks</Link>
                </Button>
             {!isAuthenticated ? (
               <div className="flex gap-3">

@@ -1,4 +1,4 @@
-import NewsList from "@/components/NewsList";
+import NewsList from "@/components/News/NewsList";
 import NewsPagination from "@/components/paginationNews";
 
 export default async function Home(

@@ -2,23 +2,9 @@
 import  DOMPurify from "isomorphic-dompurify";
 import Image from "next/image";
 import { Card, CardHeader } from "@/components/ui/card";
-import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
-
-export type NewsDetailProps = {
-  news: {
-    id: string;
-    webTitle: string;
-    fields: {
-      thumbnail: string;
-      trailText: string;
-      body: string;
-    };
-    sectionName: string;
-    webPublicationDate: string;
-  };
-};
+import { News } from "@/app/type";
 
 export default async function NewsDetail({
   params,
@@ -36,9 +22,11 @@ export default async function NewsDetail({
   const cleanContent = DOMPurify.sanitize(news?.fields?.body);
   return (
   <>
-  <div className="p-10">
+  <div className=" p-10">
      <Link href={`/`} >
-            <ArrowLeft className="h-5 w-5" />
+     <Button className="mb-4 px-6 py-3" variant="secondary">
+                   ← Back to news
+                 </Button>
        </Link>
        </div>
     <div className="flex justify-center items-center mt-8">
@@ -75,7 +63,7 @@ export const generateStaticParams = async () => {
       return [];
     }
     
-    return result.response.results.map((item: any ) => ({
+    return result.response.results.map((item: News ) => ({
       newsId: [item.id] 
     }));
     

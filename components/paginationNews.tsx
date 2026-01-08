@@ -1,4 +1,4 @@
-// src/components/common/NewsPagination.tsx
+
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
